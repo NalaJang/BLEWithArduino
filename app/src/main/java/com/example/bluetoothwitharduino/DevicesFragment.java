@@ -65,8 +65,11 @@ public class DevicesFragment extends ListFragment {
 
         // Bluetooth 지원 기기인지 확인
         if (bluetoothAdapter == null) {
-            Toast.makeText(getActivity(), R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-//            finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+            builder.setTitle(R.string.ble_not_supported);
+            builder.setMessage(R.string.ble_not_supported);
+            builder.setPositiveButton(R.string.close_app, ((dialog, which) -> requireActivity().finish()));
+
         } else {
             bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         }
