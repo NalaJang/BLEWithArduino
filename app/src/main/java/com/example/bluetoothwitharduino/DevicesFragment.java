@@ -195,10 +195,6 @@ public class DevicesFragment extends ListFragment {
     // 스캔을 시작하면 권한 요청
     public boolean checkPermission() {
         Log.d(TAG, "checkPermission");
-//        if( scanState != ScanState.NONE )
-//            return false;
-//
-//        scanState = ScanState.LE_SCAN;
 
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
             if( ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -210,9 +206,6 @@ public class DevicesFragment extends ListFragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 builder.setTitle(R.string.location_permission_title);
                 builder.setMessage(R.string.location_permission_message);
-                builder.setNegativeButton(android.R.string.cancel, ((dialog, which) -> {
-                    stopScan();
-                }));
 
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 //                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
