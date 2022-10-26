@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BluetoothWithArduino</string>
+
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="location_permission_title">위치 정보 접근 권한 요청</string>
+    <string name="location_permission_message">Bluetooth 장치 검색을 위해 위치 정보가 필요합니다.</string>
+    <string name="bluetooth_request_canceled">Bluetooth 활성화가 거부되었습니다.</string>
+    <string name="unknown_device">unknown_device</string>
+
+    <!-- menu_device_scan.xml -->
+    <string name="ble_start_scan">SCAN</string>
+    <string name="ble_stop_scan">STOP</string>
+    <string name="ble_setting">BLE Setting</string>
+
+    <!-- device_list_header -->
+    <string name="header_text">Bluetooth Le Devices</string>
+</resources>
