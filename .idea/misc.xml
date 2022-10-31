@@ -7,8 +7,9 @@
         <entry key="app/src/main/res/layout/device_list_header.xml" value="0.1" />
         <entry key="app/src/main/res/layout/device_list_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_devices.xml" value="0.21574074074074073" />
-        <entry key="app/src/main/res/layout/fragment_terminal.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_terminal.xml" value="0.165" />
         <entry key="app/src/main/res/menu/menu_device_scan.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.103" />
       </map>
     </option>
   </component>
