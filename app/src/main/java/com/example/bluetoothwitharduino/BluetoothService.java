@@ -12,7 +12,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 public class BluetoothService extends Service {
-
+    private final String TAG = "BluetoothService";
     private boolean connected;
     private BluetoothGatt bluetoothGatt;
     private BluetoothAdapter bluetoothAdapter;
@@ -28,7 +28,7 @@ public class BluetoothService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
 
     @Override
