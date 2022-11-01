@@ -1,19 +1,21 @@
 package com.example.bluetoothwitharduino;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class TerminalFragment extends Fragment implements ServiceConnection {
+import androidx.fragment.app.Fragment;
 
+public class TerminalFragment extends Fragment {
+
+    private final String TAG = "TerminalFragment";
     private enum Connected {False, Pending, True}
 
     private String deviceAddress;
@@ -28,16 +30,15 @@ public class TerminalFragment extends Fragment implements ServiceConnection {
         if( getArguments() != null)
             deviceAddress = getArguments().getString("device");
         else
-            deviceAddress = "null";
+            deviceAddress = null;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if( bluetoothService != null ) {
-//            service.attach(this);
-        } else
-            requireActivity().startService(new Intent(getActivity(), BluetoothService.class));
+    public void onResume() {
+        super.onResume();
+
+        Intent gattServiceIntent = new Intent(getActivity(), BluetoothService.class);
+        requireActivity().bindService(gattServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -55,20 +56,23 @@ public class TerminalFragment extends Fragment implements ServiceConnection {
         return inflater.inflate(R.layout.fragment_terminal, container, false);
     }
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        bluetoothService = ((BluetoothService.LocalBinder) service).getService();
-        if( !bluetoothService.initialize() ) {
-            requireActivity().finish();
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected");
+            bluetoothService = ((BluetoothService.LocalBinder) service).getService();
+            if( !bluetoothService.initialize() ) {
+                requireActivity().finish();
+            }
+
+            bluetoothService.connect(deviceAddress);
         }
 
-        bluetoothService.connect(deviceAddress);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        bluetoothService = null;
-    }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bluetoothService = null;
+        }
+    };
 
     private void disconnect() {
         connected = Connected.False;
