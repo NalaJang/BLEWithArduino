@@ -1,5 +1,7 @@
 package com.example.bluetoothwitharduino;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-public class TerminalFragment extends Fragment {
+public class TerminalFragment extends Fragment implements SerialListener{
 
     private final String TAG = "TerminalFragment";
     private enum Connected {False, Pending, True}
@@ -39,6 +42,10 @@ public class TerminalFragment extends Fragment {
 
         Intent gattServiceIntent = new Intent(getActivity(), BluetoothService.class);
         requireActivity().bindService(gattServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+        // null exception 이 발생
+        if( bluetoothService != null)
+            requireActivity().runOnUiThread(this::connect);
     }
 
     @Override
@@ -65,7 +72,9 @@ public class TerminalFragment extends Fragment {
                 requireActivity().finish();
             }
 
-            bluetoothService.connect(deviceAddress);
+//            bluetoothService.connect(deviceAddress);
+            connect();
+
         }
 
         @Override
@@ -74,8 +83,48 @@ public class TerminalFragment extends Fragment {
         }
     };
 
+    private void connect() {
+        try {
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
+
+            SerialSocket socket = new SerialSocket(requireActivity().getApplicationContext(), device);
+            bluetoothService.connect(socket);
+
+            Log.d(TAG, "connecting...");
+            connected = Connected.Pending;
+
+        } catch (Exception e) {
+            onSerialConnectError(e);
+        }
+    }
+
     private void disconnect() {
         connected = Connected.False;
         bluetoothService.disconnect();
+    }
+
+    /*
+     * SerialListener
+     */
+    @Override
+    public void onSerialConnect() {
+
+    }
+
+    @Override
+    public void onSerialConnectError(Exception e) {
+        Log.d(TAG, "connection failed: " + e.getMessage());
+        disconnect();
+    }
+
+    @Override
+    public void onSerialRead(byte[] data) {
+
+    }
+
+    @Override
+    public void onSerialIOError(Exception e) {
+
     }
 }

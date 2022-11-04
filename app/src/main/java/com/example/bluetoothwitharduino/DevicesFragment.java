@@ -52,6 +52,7 @@ public class DevicesFragment extends ListFragment {
     private final ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
     private static final long SCAN_PERIOD = 10000;  // 10초
     private String getDeviceName;
+    private RequestPermission requestPermission;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,6 @@ public class DevicesFragment extends ListFragment {
         } else {
             bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         }
-
         deviceListAdapter = new ArrayAdapter<BluetoothDevice>(getActivity(), 0, deviceList) {
             @NonNull
             @Override
@@ -197,7 +197,6 @@ public class DevicesFragment extends ListFragment {
         Log.d(TAG, "checkPermission");
 
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
-<<<<<<< HEAD
             if( ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ) {
@@ -211,7 +210,6 @@ public class DevicesFragment extends ListFragment {
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 //                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
                     scanState = ScanState.LE_SCAN;
-=======
 //            if( ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
 //                && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
 //                && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ) {
@@ -228,15 +226,14 @@ public class DevicesFragment extends ListFragment {
 //                builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 ////                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
 //                    scanState = ScanState.LE_SCAN;
->>>>>>> new_branch
                     requestPermissionResult.launch(new String[] {
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.BLUETOOTH_CONNECT,
                             Manifest.permission.BLUETOOTH_SCAN
                     });
-//                });
-//                builder.show();
-//            }
+                });
+                builder.show();
+            }
 
             boolean locationEnabled = false;
             LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -306,7 +303,7 @@ public class DevicesFragment extends ListFragment {
 
                 Handler handler = new Handler();
                 handler.postDelayed(() -> {
-                    if( checkPermission() )
+//                    if( checkPermission() )
                         bluetoothLeScanner.stopScan(scanCallback);
                 Log.d(TAG, "postDelayed");
                 }, SCAN_PERIOD);

@@ -1,15 +1,20 @@
 package com.example.bluetoothwitharduino;
 
+import android.Manifest;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+
+import java.io.IOException;
 
 public class BluetoothService extends Service {
     private final String TAG = "BluetoothService";
@@ -17,7 +22,8 @@ public class BluetoothService extends Service {
     private BluetoothGatt bluetoothGatt;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothManager bluetoothManager;
-    private DevicesFragment devicesFragment = new DevicesFragment();
+    private SerialSocket socket;
+
 
     public class LocalBinder extends Binder {
         BluetoothService getService() {
@@ -61,11 +67,18 @@ public class BluetoothService extends Service {
         return true;
     }
 
+    // TerminalFragment 에서 사용
+    public void connect(SerialSocket socket) throws IOException {
+        this.socket = socket;
+        socket.connect();
+        connected = true;
+    }
+
 
     public void disconnect() {
         connected = false;
 
-        if( devicesFragment.checkPermission() )
+        if( checkPermission() )
             bluetoothGatt.disconnect();
     }
 
@@ -73,9 +86,24 @@ public class BluetoothService extends Service {
         if (bluetoothGatt == null)
             return;
 
-        if( devicesFragment.checkPermission() ) {
+        if( checkPermission() ) {
             bluetoothGatt.close();
             bluetoothGatt = null;
         }
+    }
+
+    private boolean checkPermission() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return false;
+        } else
+            return true;
     }
 }
