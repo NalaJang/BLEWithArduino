@@ -54,8 +54,8 @@ public class BluetoothService extends Service {
         }
 
         bluetoothAdapter = bluetoothManager.getAdapter();
-        if( bluetoothAdapter == null)
-            return false;
+//        if( bluetoothAdapter == null)
+//            return false;
 
         return true;
     }
