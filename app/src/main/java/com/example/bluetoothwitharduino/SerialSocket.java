@@ -2,27 +2,22 @@ package com.example.bluetoothwitharduino;
 
 import android.Manifest;
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.util.Log;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
 public class SerialSocket extends BluetoothGattCallback {
-    private String TAG = "SerialSocket";
+    private final String TAG = "SerialSocket";
     private final Context context;
     private SerialSocket socket;
     private SerialListener listener;
