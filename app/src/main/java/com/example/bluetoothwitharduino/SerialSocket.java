@@ -61,6 +61,33 @@ public class SerialSocket extends BluetoothGattCallback {
             throw new IOException("connectGatt failed");
     }
 
+
+
+    /**
+     * SerialListener
+     */
+    private void onSerialConnect() {
+        if( listener != null )
+            listener.onSerialConnect();
+    }
+
+    private void onSerialConnectError(Exception e) {
+        canceled = true;
+        if( listener != null )
+            listener.onSerialConnectError(e);
+    }
+
+    private void onSerialRead(byte[] data) {
+        if( listener != null )
+            listener.onSerialRead(data);
+    }
+
+    private void onSerialIOError(Exception e) {
+        canceled = true;
+        if( listener != null )
+            listener.onSerialIOError(e);
+    }
+
     private boolean checkPermission() {
 
         if( ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
