@@ -187,8 +187,12 @@ public class DevicesFragment extends ListFragment {
         // bluetooth 사용 가능
         else {
             setEmptyText("<use SCAN to refresh devices>");
-            if( menu != null )
-                menu.findItem(R.id.ble_start_scan).setEnabled(true);
+            /*
+             * 22.11.09: 주석
+             * TerminalFragment 에 넘어갔다가 뒤로 돌아왔을 때 여기서 계속 nullException 발생
+             */
+//            if( menu != null )
+//                menu.findItem(R.id.ble_start_scan).setEnabled(true);
         }
     }
 
