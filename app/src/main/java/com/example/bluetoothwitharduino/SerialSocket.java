@@ -40,6 +40,7 @@ public class SerialSocket extends BluetoothGattCallback {
         this.device = device;
     }
 
+    // BluetoothService 에서 사용
     void connect() throws IOException {
         if (connected || gatt != null)
             throw new IOException("already connected");
@@ -52,10 +53,12 @@ public class SerialSocket extends BluetoothGattCallback {
         if( checkPermission() ) {
             gatt = device.connectGatt(context, false, this);
             connectionState = STATE_CONNECTED;
-        }
-        else
+
+        } else
             Log.d(TAG, "permission denied");
 
+        if( gatt == null )
+            throw new IOException("connectGatt failed");
     }
 
     private boolean checkPermission() {
